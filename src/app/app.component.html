@@ -1,0 +1,84 @@
+<h1>SpaceX Launch Programs</h1>
+
+<div class="filters">
+  <p class="menu">Filters</p>
+  <br />
+
+  <p class="sub-menu">Launch Year</p>
+  <div class="row">
+    <div class="column-2" *ngFor="let year of filtersYear">
+      <button [ngClass]="{ 'button-active': activeYear === year }" (click)="onYearFilter(year)">
+        {{ year }}
+      </button>
+    </div>
+  </div>
+  <br />
+
+  <p class="sub-menu">Successful Launch</p>
+  <div class="row">
+    <div class="column-2" *ngFor="let success of filtersSuccess">
+      <button [ngClass]="{ 'button-active': activeLaunch == success }" (click)="onLaunchFilter(success)">
+        {{ success ? "True" : "False" }}
+      </button>
+    </div>
+  </div>
+  <br />
+
+  <p class="sub-menu">Successful Landing</p>
+  <div class="row">
+    <div class="column-2" *ngFor="let success of filtersSuccess">
+      <button [ngClass]="{ 'button-active': activeLanding == success }" (click)="onLandingFilter(success)">
+        {{ success ? "True" : "False" }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Loader HTML -->
+<div *ngIf="loading">
+  <h2>Loading.....</h2>
+</div>
+
+<div class="launch-card" *ngIf="!loading && allSpaceXLaunches.length > 0; else noItems">
+
+  <div class="row">
+    <div class="column-1" *ngFor="let launch of allSpaceXLaunches">
+      <div class="card">
+        <img class="launch-img" width="90%" [src]="launch.links.mission_patch_small" alt="image" />
+
+        <p class="launch-name">
+          {{ launch?.mission_name }} #{{ launch?.flight_number }}
+        </p>
+
+        <p>Mission Ids:</p>
+        <ul *ngFor="let mission of launch.mission_id">
+          <li>{{ mission }}</li>
+        </ul>
+
+        <p>
+          Launch Year: <span class="text">{{ launch?.launch_year }}</span>
+        </p>
+
+        <p>
+          Successful Launch:
+          <span class="text">
+            {{ getLaunchStatus(launch) }}
+          </span>
+        </p>
+
+        <p>
+          Successful Landing:
+          <span class="text">
+            {{ getLandingStatus(launch) }}
+          </span>
+        </p>
+      </div>
+
+      <br />
+    </div>
+  </div>
+</div>
+
+<ng-template #noItems>
+  <h2 *ngIf="!loading">No Launch Programs</h2>
+</ng-template>
